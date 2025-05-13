@@ -44,20 +44,21 @@ class ANN_2_2_1:
 
     def initialize_model(self):
         """
-        Initialize the neural network model with random weights
+        Initialize the neural network model with random weights.
+        Uses ReLU activation in the hidden layer and Sigmoid in the output layer.
         """
         # Create a sequential model
         self.model = torch.nn.Sequential(
             torch.nn.Linear(self.input_size, self.hidden_size),
-            torch.nn.Sigmoid(),
+            torch.nn.ReLU(),  # ReLU activation for hidden layer
             torch.nn.Linear(self.hidden_size, self.output_size),
-            torch.nn.Sigmoid()
+            torch.nn.Sigmoid()  # Sigmoid activation for output layer
         )
 
         # Initialize weights with small random values
         for layer in self.model:
             if isinstance(layer, torch.nn.Linear):
-                torch.nn.init.xavier_uniform_(layer.weight)
+                torch.nn.init.kaiming_uniform_(layer.weight, nonlinearity='relu')  # Better for ReLU
                 torch.nn.init.zeros_(layer.bias)
 
     def set_error_function(self, error_function):
